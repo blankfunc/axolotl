@@ -1,0 +1,27 @@
+
+[package]
+authors = ["LongYinan <lynweklm@gmail.com>"]
+edition = "2021"
+name = "axolotl"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+h3 = "0.0.8"
+h3-quinn = { version = "0.0.10", features = ["datagram"] }
+hyper = { version = "1.6.0", features = ["http1", "http2", "server"] }
+napi = "3.0.0"
+napi-derive = "3.0.0"
+once_cell = "1.21.3"
+thiserror = "2.0.12"
+tokio = { version = "1.47.1", features = ["net", "rt", "rt-multi-thread", "sync"] }
+wtransport = { version = "0.6.1", features = ["quinn", "quinn-log"] }
+
+[build-dependencies]
+napi-build = "2"
+
+[profile.release]
+lto = true
+strip = "symbols"
