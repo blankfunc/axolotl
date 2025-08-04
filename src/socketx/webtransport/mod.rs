@@ -11,4 +11,9 @@ impl TransportServer {
 	pub fn new() -> Self {
 		Self {}
 	}
+
+	#[napi(factory)]
+	pub fn with_httpx_server() -> Self {
+		Self {}
+	}
 }

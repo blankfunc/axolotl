@@ -2,6 +2,7 @@
 
 // use napi_derive::napi;
 
+mod common;
 mod httpx;
 mod socketx;
 

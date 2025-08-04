@@ -2,16 +2,206 @@
 /* eslint-disable */
 export declare class HttpxServer {
   constructor(options?: HttpxServerOptions | undefined | null)
+  /** Monitoring events. */
+  static on(event: HttpxServerEvents, callback: (arg?: unknown) => unknown): void
+  /** Delete listening */
+  static off(id: number): void
+  /**
+   * Listen for TCP and QUIC connections at a certain address.
+   *
+   * https://nodejs.org/api/http.html#serverlisten
+   */
+  static listen(): void
+  /**
+   * Attempt to shut down the server.
+   *
+   * When closing successfully, call callback.
+   *
+   * https://nodejs.org/api/http.html#serverclosecallback
+   */
+  static close(callback?: (arg?: unknown) => unknown | undefined | null): void
+  /**
+   * Close all connections already connected to this server.
+   *
+   * Default closure of all protocol connections.
+   *
+   * https://nodejs.org/api/http.html#servercloseallconnections
+   */
+  static closeAllConnections(protocols?: ConnectionProtocols | undefined | null): void
+  /**
+   * Close all connections that have been established but have not completed protocol handover.
+   *
+   * https://nodejs.org/api/http.html#servercloseidleconnections
+   */
+  static closeIdleConnections(): void
+  /**
+   * Is listening for connections.
+   *
+   * https://nodejs.org/api/http.html#serverlistening
+   */
+  get listening(): void
+  /**
+   * Limit the amount of time the parser will wait to receive the complete HTTP headers.
+   *
+   * https://nodejs.org/api/http.html#serverheaderstimeout
+   */
+  get headersTimeout(): void
+  /**
+   * Limits maximum incoming headers count. If set to 0, no limit will be applied.
+   *
+   * https://nodejs.org/api/http.html#servermaxheaderscount
+   */
+  get maxHeadersCount(): void
+  /**
+   * Sets the timeout value in milliseconds for receiving the entire request from the client.
+   *
+   * https://nodejs.org/api/http.html#serverrequesttimeout
+   */
+  get requestTimeout(): void
+  /**
+   * The maximum number of requests socket can handle before closing keep alive connection.
+   *
+   * https://nodejs.org/api/http.html#servermaxrequestspersocket
+   */
+  get maxRequestsPerSocket(): void
+  /**
+   * The number of milliseconds of inactivity before a socket is presumed to have timed out.
+   *
+   * https://nodejs.org/api/http.html#servertimeout
+   */
+  get timeout(): void
+  /**
+   * The number of milliseconds of inactivity a server needs to wait for additional incoming data, after it has finished writing the last response, before a socket will be destroyed.
+   *
+   * https://nodejs.org/api/http.html#serverkeepalivetimeout
+   */
+  get keepAliveTimeout(): void
+  /**
+   * Limit the amount of time the parser will wait to receive the complete HTTP headers.
+   *
+   * https://nodejs.org/api/http.html#serverheaderstimeout
+   */
+  set headersTimeout(value: number)
+  /**
+   * Limits maximum incoming headers count. If set to 0, no limit will be applied.
+   *
+   * https://nodejs.org/api/http.html#servermaxheaderscount
+   */
+  set maxHeadersCount(value: number)
+  /**
+   * Sets the timeout value in milliseconds for receiving the entire request from the client.
+   *
+   * https://nodejs.org/api/http.html#serverrequesttimeout
+   */
+  set requestTimeout(value: number)
+  /**
+   * The maximum number of requests socket can handle before closing keep alive connection.
+   *
+   * https://nodejs.org/api/http.html#servermaxrequestspersocket
+   */
+  set maxRequestsPerSocket(value: number)
+  /**
+   * The number of milliseconds of inactivity before a socket is presumed to have timed out.
+   *
+   * https://nodejs.org/api/http.html#servertimeout
+   */
+  set timeout(value: number)
+  /**
+   * The number of milliseconds of inactivity a server needs to wait for additional incoming data, after it has finished writing the last response, before a socket will be destroyed.
+   *
+   * https://nodejs.org/api/http.html#serverkeepalivetimeout
+   */
+  set keepAliveTimeout(value: number)
 }
 
 export declare class SocketServer {
   constructor()
+  static withHttpxServer(): SocketServer
 }
 
 export declare class TransportServer {
   constructor()
+  static withHttpxServer(): TransportServer
+}
+
+export declare const enum ConnectionProtocols {
+  All = 'All',
+  Http1 = 'Http1',
+  Http2 = 'Http2',
+  Http3 = 'Http3',
+  WebSocket = 'WebSocket',
+  WebTransport = 'WebTransport'
+}
+
+export declare const enum HttpxServerEvents {
+  /**
+   * Emitted each time a request with an HTTP `Expect: 100-continue` is received.
+   *
+   * If this event is not listened for, the server will automatically respond with a `100 Continue` as appropriate.
+   *
+   * https://nodejs.org/api/http.html#event-checkcontinue
+   */
+  CheckContinue = 'CheckContinue',
+  /**
+   * Emitted each time a request with an HTTP `Expect` header is received, where the value is not `100-continue`.
+   *
+   * If this event is not listened for, the server will automatically respond with a `417 Expectation` Failed as appropriate.
+   *
+   * https://nodejs.org/api/http.html#event-checkexpectation
+   */
+  CheckExpectation = 'CheckExpectation',
+  /**
+   * If a client connection emits an 'error' event, it will be forwarded here.
+   *
+   * https://nodejs.org/api/http.html#event-clienterror
+   */
+  ClientError = 'ClientError',
+  /**
+   * Emitted when the server closes.
+   *
+   * https://nodejs.org/api/http.html#event-close_1
+   */
+  Close = 'Close',
+  /**
+   * Emitted each time a client requests an HTTP `CONNECT` method.
+   *
+   * https://nodejs.org/api/http.html#event-connect_1
+   */
+  Connect = 'Connect',
+  /**
+   * This event is emitted when a new TCP stream is established.
+   *
+   * https://nodejs.org/api/http.html#event-connection
+   */
+  Connection = 'Connection',
+  /**
+   * When the number of requests on a socket reaches the threshold of `max_requests_per_socket`, the server will drop new requests and emit 'dropRequest' event instead, then send `503` to client.
+   *
+   * https://nodejs.org/api/http.html#event-droprequest
+   */
+  DropRequest = 'DropRequest',
+  /**
+   * Emitted each time there is a request. There may be multiple requests per connection (in the case of HTTP Keep-Alive connections).
+   *
+   * https://nodejs.org/api/http.html#event-request
+   */
+  Request = 'Request',
+  /**
+   * Emitted each time a client requests an HTTP upgrade. Listening to this event is optional and clients cannot insist on a protocol change.
+   *
+   * https://nodejs.org/api/http.html#event-upgrade_1
+   */
+  Upgrade = 'Upgrade'
 }
 
 export interface HttpxServerOptions {
+  /** TLS Option for HTTP/2 and HTTP/3 */
+  tls?: TlsConfig
+  enableHttp2?: boolean
+  enableHttp3?: boolean
+}
 
+export interface TlsConfig {
+  cert: string
+  ket: string
 }

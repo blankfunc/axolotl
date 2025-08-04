@@ -119,7 +119,6 @@ dist
 /target
 Cargo.lock
 
-/.yarn/
 *.node
 .pnp.*
 .yarn/*
